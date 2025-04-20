@@ -37,6 +37,13 @@ Let's say you have an external geo service (`IGeoService`) that takes a latitude
 This call might take a couple of seconds, and you only need the result **at the end of your API logic**, not right away.
 
 
+# Installation
+Install the package via NuGet:
+
+```xml
+dotnet add package Async.Task.Runner.Core
+
+
 ```csharp
 public interface IGeoService
 {
