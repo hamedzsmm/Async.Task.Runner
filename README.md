@@ -36,7 +36,6 @@ This allows multiple operations to proceed **in parallel**, reducing overall res
 Let's say you have an external geo service (`IGeoService`) that takes a latitude and longitude and returns geographic information (like country, city, village).  
 This call might take a couple of seconds, and you only need the result **at the end of your API logic**, not right away.
 
-### 🔧 Interfaces:
 
 ```csharp
 public interface IGeoService
@@ -51,9 +50,8 @@ public class LocationInfo
     public long VillageId { get; set; }
 }
 
-You can offload it like this:
 
-```csharp
+//You can offload it like this:
 public class MyService
 {
     private readonly IAsyncTaskRunner<string> _taskRunner;
