@@ -52,30 +52,21 @@ public class LocationInfo
 
 
 //You can offload it like this:
-public class MyService
+public class MyService(IAsyncTaskRunner<string> taskRunner, IGeoService geoService)
 {
-    private readonly IAsyncTaskRunner<string> _taskRunner;
-	private readonly IGeoService _geoService;
-
-    public MyService(IAsyncTaskRunner<string> taskRunner,IGeoService geoService)
-    {
-        _taskRunner = taskRunner;
-		_geoService = geoService;
-    }
-
     public async Task RunAsync()
     {
-		double latitude = (double) 35.72828545564619;
-		double longtitude = (double) 51.41550287298716;
-		
-        var taskId = await _taskRunner.StartTaskAsync(async () =>
+        double latitude = (double)35.72828545564619;
+        double longitude = (double)51.41550287298716;
+
+        var taskId = await taskRunner.StartTaskAsync(async () =>
         {
-            return await _geoService.GetLocationAsync(latitude,longtitude);
+            return await geoService.GetLocationAsync(latitude, longitude);
         });
 
         // Do some other work here...
 
-        var locationInfo = await _taskRunner.GetTaskResultByTaskIdAsync<LocationInfo>(taskId);
+        var locationInfo = await taskRunner.GetTaskResultByTaskIdAsync<LocationInfo>(taskId);
         Console.WriteLine(locationInfo.CountryId); // Output: Id of Country
     }
 }
