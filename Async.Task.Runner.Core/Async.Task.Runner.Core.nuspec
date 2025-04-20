@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Async.Task.Runner.Core</id>
+		<version>1.0.0</version>
+		<title>Async Task Runner (Generic In-Memory Background Tasks)</title>
+		<authors>Hamed Seifi</authors>
+		<owners>Hamed Seifi</owners>
+		<license type="expression">MIT</license>
+		<projectUrl>https://github.com/hamedzsmm/Async.Task.Runner</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>A lightweight, generic utility for running long-running or non-blocking tasks in-memory with parallel execution, enabling you to build high-performance APIs by offloading independent tasks without waiting for their completion upfront.</description>
+		<releaseNotes>Initial release.</releaseNotes>
+		<copyright>Copyright © 2025</copyright>
+		<dependencies>
+			<group targetFramework="net8.0">
+				
+			</group>
+		</dependencies>
+		<tags>task runner high performance async generic inmemory cache</tags>
+	</metadata>
+	<files>
+		<file src="bin\Release\net8.0\Async.Task.Runner.Core.dll" target="lib\net8.0"/>
+	</files>
+</package>
