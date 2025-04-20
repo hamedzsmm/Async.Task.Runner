@@ -56,9 +56,11 @@ public class LocationInfo
     public long CityId { get; set; }
     public long VillageId { get; set; }
 }
+```
 
+#You can offload it like this:
 
-//You can offload it like this:
+```csharp
 public class MyService(IAsyncTaskRunner<string> taskRunner, IGeoService geoService)
 {
     public async Task RunAsync()
@@ -77,3 +79,4 @@ public class MyService(IAsyncTaskRunner<string> taskRunner, IGeoService geoServi
         Console.WriteLine(locationInfo.CountryId); // Output: Id of Country
     }
 }
+```
