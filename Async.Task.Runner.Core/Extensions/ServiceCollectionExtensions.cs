@@ -6,6 +6,7 @@ namespace Async.Task.Runner.Core.Extensions
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddMemoryCache();
             serviceCollection.AddSingleton(typeof(IAsyncTaskRunner<>), typeof(InMemoryAsyncTaskRunner<>));
             return serviceCollection;
         }

@@ -30,29 +30,54 @@ This allows multiple operations to proceed **in parallel**, reducing overall res
 
 ---
 
-## 💡 Example
+
+## 💡 Example Use Case: Geo Lookup in the Background
+
+Let's say you have an external geo service (`IGeoService`) that takes a latitude and longitude and returns geographic information (like country, city, village).  
+This call might take a couple of seconds, and you only need the result **at the end of your API logic**, not right away.
+
+### 🔧 Interfaces:
+
+```csharp
+public interface IGeoService
+{
+    Task<LocationInfo> GetLocationAsync(double latitude, double longitude);
+}
+
+public class LocationInfo
+{
+    public long CountryId { get; set; }
+    public long CityId { get; set; }
+    public long VillageId { get; set; }
+}
+
+You can offload it like this:
 
 ```csharp
 public class MyService
 {
     private readonly IAsyncTaskRunner<string> _taskRunner;
+	private readonly IGeoService _geoService;
 
-    public MyService(IAsyncTaskRunner<string> taskRunner)
+    public MyService(IAsyncTaskRunner<string> taskRunner,IGeoService geoService)
     {
         _taskRunner = taskRunner;
+		_geoService = geoService;
     }
 
     public async Task RunAsync()
     {
+		double latitude = (double) 35.72828545564619;
+		double longtitude = (double) 51.41550287298716;
+		
         var taskId = await _taskRunner.StartTaskAsync(async () =>
         {
-            await Task.Delay(5000);
-            return "Heavy work completed!";
+            return await _geoService.GetLocationAsync(latitude,longtitude);
         });
 
         // Do some other work here...
 
-        var result = await _taskRunner.GetTaskResultByTaskIdAsync(taskId);
-        Console.WriteLine(result); // Output: Heavy work completed!
+        var locationInfo = await _taskRunner.GetTaskResultByTaskIdAsync<LocationInfo>(taskId);
+        Console.WriteLine(locationInfo.CountryId); // Output: Id of Country
     }
 }
