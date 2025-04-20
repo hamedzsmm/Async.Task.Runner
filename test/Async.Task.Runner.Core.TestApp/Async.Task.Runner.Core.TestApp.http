@@ -1,0 +1,6 @@
+@Async.Task.Runner.Core.TestApp_HostAddress = http://localhost:5082
+
+GET {{Async.Task.Runner.Core.TestApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
