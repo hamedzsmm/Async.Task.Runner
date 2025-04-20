@@ -38,7 +38,7 @@ namespace Async.Task.Runner.Core.TestApp.Controllers
                 weatherForecast.CountryId = locationInfo.CountryId;
             }
 
-            return result;
+            return result;  //in 2.5 seconds
         }
 
         [HttpGet]
@@ -66,7 +66,7 @@ namespace Async.Task.Runner.Core.TestApp.Controllers
                 weatherForecast.CountryId = locationInfo.CountryId;
             }
 
-            return result;
+            return result; //in 1.5 seconds
         }
     }
 }

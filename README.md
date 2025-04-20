@@ -58,6 +58,16 @@ public interface IGeoService
     Task<LocationInfo> GetLocationAsync(double latitude, double longitude);
 }
 
+public class GeoService : IGeoService
+{
+    public async Task<LocationInfo> GetLocationAsync(double latitude, double longitude)
+    {
+        //simulate long running task
+        await System.Threading.Tasks.Task.Delay(1500);
+        return new LocationInfo { CountryId = 100, CityId = 101, VillageId = 1011 };
+    }
+}
+
 public class LocationInfo
 {
     public long CountryId { get; set; }
@@ -69,22 +79,69 @@ public class LocationInfo
 # You can offload it like this:
 
 ```csharp
-public class MyService(IAsyncTaskRunner<string> taskRunner, IGeoService geoService)
+[ApiController]
+[Route("[controller]")]
+public class WeatherForecastController(ILogger<WeatherForecastController> logger) : ControllerBase
 {
-    public async Task RunAsync()
+    private static readonly string[] Summaries =
+    [
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    ];
+
+    //simulate current location
+    private static readonly double Latitude = (double)35.72828545564619;
+    private static readonly double Longitude = (double)51.41550287298716;
+
+
+    [HttpGet]
+    [Route("GetWeatherForecast/normal")]
+    public async Task<IEnumerable<WeatherForecast>> GetNormal([FromServices] IGeoService geoService)
     {
-        double latitude = (double)35.72828545564619;
-        double longitude = (double)51.41550287298716;
-
-        var taskId = await taskRunner.StartTaskAsync(async () =>
+        await System.Threading.Tasks.Task.Delay(1000);
+        var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
-            return await geoService.GetLocationAsync(latitude, longitude);
-        });
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+        .ToArray();
 
-        // Do some other work here...
 
-        var locationInfo = await taskRunner.GetTaskResultByTaskIdAsync<LocationInfo>(taskId);
-        Console.WriteLine(locationInfo.CountryId); // Output: Id of Country
+        var locationInfo = await geoService.GetLocationAsync(Latitude, Longitude);
+        foreach (var weatherForecast in result)
+        {
+            weatherForecast.CountryId = locationInfo.CountryId;
+        }
+
+        return result;  //in 2.5 seconds
+    }
+
+    [HttpGet]
+    [Route("GetWeatherForecast/with-task-runner-usage")]
+    public async Task<IEnumerable<WeatherForecast>> GetWithTaskRunner([FromServices] IGeoService geoService,
+        [FromServices] IAsyncTaskRunner<LocationInfo> locationFinderTaskRunner)
+    {
+        var taskId = await locationFinderTaskRunner.StartTaskAsync(async () =>
+            await geoService.GetLocationAsync(Latitude, Longitude));
+
+
+        await System.Threading.Tasks.Task.Delay(1000);
+        var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+            .ToArray();
+
+
+        var locationInfo = await locationFinderTaskRunner.GetTaskResultByTaskIdAsync(taskId);
+        foreach (var weatherForecast in result)
+        {
+            weatherForecast.CountryId = locationInfo.CountryId;
+        }
+
+        return result; //in 1.5 seconds
     }
 }
 ```
