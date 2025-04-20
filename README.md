@@ -35,6 +35,7 @@ Install the package via NuGet:
 
 ```xml
 dotnet add package Async.Task.Runner.Core
+```
 
 
 ## 💡 Example Use Case: Geo Lookup in the Background
