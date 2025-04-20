@@ -37,6 +37,14 @@ Install the package via NuGet:
 dotnet add package Async.Task.Runner.Core
 ```
 
+```csharp
+using Async.Task.Runner.Core.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureTaskRunnerServices();
+```
+
 
 ## 💡 Example Use Case: Geo Lookup in the Background
 

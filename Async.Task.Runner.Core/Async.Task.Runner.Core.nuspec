@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>Async.Task.Runner.Core</id>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<title>Async Task Runner (Generic In-Memory Background Tasks)</title>
 		<authors>Hamed Seifi</authors>
 		<owners>Hamed Seifi</owners>
