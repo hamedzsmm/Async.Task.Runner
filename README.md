@@ -1,14 +1,14 @@
-# ⏱️ Async Task Runner (Generic In-Memory Background Tasks)
+# Async Task Runner (Generic In-Memory Background Tasks)
 
 A lightweight, generic utility for running long-running or non-blocking tasks **in-memory** with **parallel execution**, enabling you to build high-performance APIs by offloading independent tasks without waiting for their completion upfront.
 
 ---
 
-## 🚀 Use Case
+## Use Case
 
 This library is designed to solve a common problem in API design:
 
-> ❓ *"What if I have a long-running task that I don’t immediately need the result for, but I will later in the same request or another part of the workflow?"*
+> *"What if I have a long-running task that I don’t immediately need the result for, but I will later in the same request or another part of the workflow?"*
 
 Instead of awaiting the result right away, you can:
 
@@ -20,7 +20,7 @@ This allows multiple operations to proceed **in parallel**, reducing overall res
 
 ---
 
-## 🧠 Key Features
+## Key Features
 
 - ✅ Generic task result support (`T`)
 - ✅ In-memory result caching with 1-minute expiration
@@ -46,7 +46,7 @@ builder.Services.ConfigureTaskRunnerServices();
 ```
 
 
-## 💡 Example Use Case: Geo Lookup in the Background
+## Example Use Case: Geo Lookup in the Background
 
 Let's say you have an external geo service (`IGeoService`) that takes a latitude and longitude and returns geographic information (like country, city, village).  
 This call might take a couple of seconds, and you only need the result **at the end of your API logic**, not right away.
